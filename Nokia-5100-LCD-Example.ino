@@ -77,6 +77,8 @@ char xkcdSandwich[504] = {
 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0xFF, 
 };
 
+void lcdFunTime();
+
 void setup()
 {
   Serial.begin(9600);
@@ -106,6 +108,7 @@ void loop()
   if (Serial.available())
   {
     char c = Serial.read();
+    Serial.write(c);
     
     switch (c)
     {
@@ -164,7 +167,7 @@ void lcdFunTime()
     updateDisplay();
     delay(10);
   }
-  setStr("full of stars", 0, LCD_HEIGHT-8, BLACK);
+  setStr((char*)"full of stars", 0, LCD_HEIGHT-8, BLACK);
   updateDisplay();
   delay(1000);
   // Seizure time!!! Err...demoing invertDisplay()
@@ -272,7 +275,7 @@ void lcdFunTime()
   /* setChar & setStr Example */
   // setStr takes 4 parameters: an array of characters to print,
   // x and y coordinates for the top-left corner. And a color
-  setStr("Modern Art", 0, 10, WHITE);
+  setStr((char*)"Modern Art", 0, 10, WHITE);
   updateDisplay();
   delay(2000);
   
