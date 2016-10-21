@@ -4,8 +4,8 @@
 Most of these pins can be moved to any digital or analog pin.
 DN(MOSI)and SCLK should be left where they are (SPI pins). The 
 LED (backlight) pin should remain on a PWM-capable pin. */
-const int scePin = 7;   // SCE - Chip select, pin 3 on LCD.
-const int rstPin = 6;   // RST - Reset, pin 4 on LCD.
+const int scePin = 6;   // SCE - Chip select, pin 3 on LCD.
+const int rstPin = 7;   // RST - Reset, pin 4 on LCD.
 const int dcPin = 5;    // DC - Data/Command, pin 5 on LCD.
 const int sdinPin = 11;  // DN(MOSI) - Serial data, pin 6 on LCD.
 const int sclkPin = 13;  // SCLK - Serial clock, pin 7 on LCD.
@@ -89,7 +89,7 @@ static const byte ASCII[][5] = {
   ,{0x07, 0x08, 0x70, 0x08, 0x07} // 0x59 Y
   ,{0x61, 0x51, 0x49, 0x45, 0x43} // 0x5a Z
   ,{0x00, 0x7f, 0x41, 0x41, 0x00} // 0x5b [
-  ,{0x02, 0x04, 0x08, 0x10, 0x20} // 0x5c \
+  ,{0x02, 0x04, 0x08, 0x10, 0x20} // 0x5c '\'
   ,{0x00, 0x41, 0x41, 0x7f, 0x00} // 0x5d ]
   ,{0x04, 0x02, 0x01, 0x02, 0x04} // 0x5e ^
   ,{0x40, 0x40, 0x40, 0x40, 0x40} // 0x5f _
@@ -197,6 +197,7 @@ void LCDWrite(byte data_or_command, byte data)
   //Send the data
   digitalWrite(scePin, LOW);
   SPI.transfer(data); //shiftOut(sdinPin, sclkPin, MSBFIRST, data);
+  //shiftOut(sdinPin, sclkPin, MSBFIRST, data);
   digitalWrite(scePin, HIGH);
 }
 
@@ -503,7 +504,9 @@ void lcdBegin(void)
   
   //Reset the LCD to a known state
   digitalWrite(rstPin, LOW);
+  delay(100);
   digitalWrite(rstPin, HIGH);
+  delay(100);
 
   LCDWrite(LCD_COMMAND, 0x21); //Tell LCD extended commands follow
   LCDWrite(LCD_COMMAND, 0xB0); //Set LCD Vop (Contrast)
