@@ -35,14 +35,13 @@
    pin. Don't forget to stick a current-limiting resistor in line
    between the LCD's LED pin and Arduino pin 9!
 */
-#include <SPI.h>
 #include "LCD_Functions.h"
 
 /* This array is the same size as the displayMap. We'll use it
 as an example of how to draw a bitmap. xkcd comic transposing
 makes for an excellent display application.
 For reference, see: http://xkcd.com/149/ */
-char xkcdSandwich[504] = {
+unsigned char xkcdSandwich[504] = {
 0xFF, 0x8D, 0x9F, 0x13, 0x13, 0xF3, 0x01, 0x01, 0xF9, 0xF9, 0x01, 0x81, 0xF9, 0xF9, 0x01, 0xF1,
 0xF9, 0x09, 0x09, 0xFF, 0xFF, 0xF1, 0xF9, 0x09, 0x09, 0xF9, 0xF1, 0x01, 0x01, 0x01, 0x01, 0x01,
 0xF9, 0xF9, 0x09, 0xF9, 0x09, 0xF9, 0xF1, 0x01, 0xC1, 0xE9, 0x29, 0x29, 0xF9, 0xF1, 0x01, 0xFF,
@@ -84,15 +83,17 @@ void setup()
   Serial.begin(9600);
 
   lcdBegin(); // This will setup our pins, and initialize the LCD
+  delay(1000);
   updateDisplay(); // with displayMap untouched, SFE logo
   setContrast(40); // Good values range from 40-60
-  delay(2000);
-  
-  lcdFunTime(); // Runs a 30-second demo of graphics functions
-  
+  delay(1000);
+    
   // Wait for serial to come in, then clear display and go to echo
-  while (!Serial.available())
-    ;
+  while (!Serial.available()) {
+	  updateDisplay(); // with displayMap untouched, SFE logo
+	  lcdFunTime(); // Runs a 30-second demo of graphics functions
+	  delay(1000);
+  }
   clearDisplay(WHITE);
   updateDisplay();
 }
@@ -282,6 +283,6 @@ void lcdFunTime()
   /* setBitmap Example */
   // setBitmap takes one parameter, an array of the same size
   // as our screen.
-  setBitmap(xkcdSandwich);
+  setBitmap((char*)xkcdSandwich);
   updateDisplay();
 }

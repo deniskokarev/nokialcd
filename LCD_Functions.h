@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <SPI.h>
 
 /* Pin definitions: 
 Most of these pins can be moved to any digital or analog pin.
@@ -504,9 +505,9 @@ void lcdBegin(void)
   
   //Reset the LCD to a known state
   digitalWrite(rstPin, LOW);
-  delay(100);
+  delay(500);
   digitalWrite(rstPin, HIGH);
-  delay(100);
+  delay(500);
 
   LCDWrite(LCD_COMMAND, 0x21); //Tell LCD extended commands follow
   LCDWrite(LCD_COMMAND, 0xB0); //Set LCD Vop (Contrast)
